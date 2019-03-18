@@ -1,0 +1,30 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "rgName": {
+            "value": "ResourceGroup1"
+        },
+        "rgLocation": {
+            "value": "westeurope"
+        },
+        "storageAccountPrefix": {
+            "value": "Sentia"
+        },
+        "vnetName": {
+            "value": "VNet1"
+        },
+        "vnetAddressPrefix": {
+            "value": "172.16.0.0/12"
+        },
+        "vnetAddressPrefix-Subnet1": {
+            "value": "172.16.0.0/24"
+        },
+        "vnetAddressPrefix-Subnet2": {
+            "value": "172.16.1.0/24"
+        },
+        "vnetAddressPrefix-Subnet3": {
+            "value": "172.16.2.0/24"
+        }
+    }
+}

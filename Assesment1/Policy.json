@@ -1,0 +1,31 @@
+{
+    "properties": {
+        "displayName": "Allowed resource types",
+        "policyType": "Custom",
+        "description": "This policy limits deployment of resources to only allowed types",
+        "mode": "all",
+        "policyRule": {
+            "if": {
+                "not": {
+                    "anyOf": [
+                        {
+                            "field": "type",
+                            "like": "Microsoft.Storage/*"
+                        },
+                        {
+                            "field": "type",
+                            "like": "Microsoft.Compute/*"
+                        },
+                        {
+                            "field": "type",
+                            "like": "Microsoft.Network/*"
+                        }
+                    ]
+                }
+            },
+            "then": {
+                "effect": "deny"
+            }
+        }
+    }
+}

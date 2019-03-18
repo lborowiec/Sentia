@@ -1,0 +1,109 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "rgName": {
+            "type": "string"
+        },
+        "rgLocation": {
+            "type": "string"
+        },
+        "storageAccountPrefix": {
+            "type": "string"
+        },
+        "vnetName": {
+            "type": "string"
+        },
+        "vnetAddressPrefix": {
+            "type": "string"
+        },
+        "vnetAddressPrefix-Subnet1": {
+            "type": "string"
+        },
+        "vnetAddressPrefix-Subnet2": {
+            "type": "string"
+        },
+        "vnetAddressPrefix-Subnet3": {
+            "type": "string"
+        }
+    },
+    "variables": {},
+    "resources": [
+        {
+            "name": "[parameters('rgName')]",
+            "type": "Microsoft.Resources/resourceGroups",
+            "apiVersion": "2018-05-01",
+            "location": "[parameters('rgLocation')]",
+            "properties": {},
+            "tags": {
+                "Environment": "Test",
+                "Compan": "Sentia"
+            }
+        },
+        {
+            "name": "ResourcesDeployment",
+            "type": "Microsoft.Resources/deployments",
+            "apiVersion": "2017-05-10",
+            "resourceGroup": "[parameters('rgName')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Resources/resourceGroups/', parameters('rgName'))]"
+            ],
+            "properties": {
+                "mode": "Incremental",
+                "template": {
+                    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+                    "contentVersion": "1.0.0.0",
+                    "parameters": {},
+                    "variables": {},
+                    "resources": [
+                        {
+                            "name": "[tolower(concat(parameters('storageAccountPrefix'), uniqueString(subscription().id, parameters('rgName'))))]",
+                            "type": "Microsoft.Storage/storageAccounts",
+                            "apiVersion": "2017-10-01",
+                            "location": "[parameters('rgLocation')]",
+                            "kind": "StorageV2",
+                            "sku": {
+                                "name": "Standard_LRS"
+                            }
+                        },
+                        {
+                            "name": "[parameters('vnetName')]",
+                            "type": "Microsoft.Network/virtualNetworks",
+                            "apiVersion": "2018-08-01",
+                            "location": "[parameters('rgLocation')]",
+                            "properties": {
+                                "addressSpace": {
+                                    "addressPrefixes": [
+                                        "[parameters('vnetAddressPrefix')]"
+                                    ]
+                                },
+                                "subnets": [
+                                    {
+                                        "name": "[concat(parameters('vnetName'), '-Subnet1')]",
+                                        "properties": {
+                                            "addressPrefix": "[parameters('vnetAddressPrefix-Subnet1')]"
+                                        }
+                                    },
+                                    {
+                                        "name": "[concat(parameters('vnetName'), '-Subnet2')]",
+                                        "properties": {
+                                            "addressPrefix": "[parameters('vnetAddressPrefix-Subnet2')]"
+                                        }
+                                    },
+                                    {
+                                        "name": "[concat(parameters('vnetName'), '-Subnet3')]",
+                                        "properties": {
+                                            "addressPrefix": "[parameters('vnetAddressPrefix-Subnet3')]"
+                                        }
+                                    }
+                                ]
+                            }
+                        }
+                    ],
+                    "outputs": {}
+                }
+            }
+        }
+    ],
+    "outputs": {}
+}
